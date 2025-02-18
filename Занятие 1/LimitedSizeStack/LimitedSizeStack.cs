@@ -8,6 +8,7 @@ public class LimitedSizeStack<T>
 	{
 
 
+
 	}
 
 	public void Push(T item)
