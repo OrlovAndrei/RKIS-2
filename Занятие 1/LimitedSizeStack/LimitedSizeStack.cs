@@ -7,7 +7,6 @@ public class LimitedSizeStack<T>
 	public LimitedSizeStack(int undoLimit)
 	{
 
-
 	}
 
 	public void Push(T item)
