@@ -6,6 +6,7 @@ public class LimitedSizeStack<T>
 {
 	public LimitedSizeStack(int undoLimit)
 	{
+
  
 	}
 
