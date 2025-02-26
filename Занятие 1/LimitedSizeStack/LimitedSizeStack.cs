@@ -41,3 +41,4 @@ public class LimitedSizeStack<T>
 	}
 
 	public int Count => _items.Count;
+}
