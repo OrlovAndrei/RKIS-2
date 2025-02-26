@@ -6,21 +6,22 @@ namespace LimitedSizeStack;
 public class ListModel<TItem>
 {
 	public List<TItem> Items { get; }
-	public int UndoLimit;
+    public int UndoLimit;, undoLimit)
         
-	public ListModel(int undoLimit) : this(new List<TItem>(), undoLimit)
-	{
-	}
+	private LimitedSizeStack<(TypeAction action, TItem item, int index)> history { get;}
 
 	public ListModel(List<TItem> items, int undoLimit)
 	{
-		Items = items;
+        Items = Items ?? new List<TItem>();
 		UndoLimit = undoLimit;
 	}
 
 	public void AddItem(TItem item)
 	{
-		Items.Add(item);
+        if (item == null) throw new ArgumentNullException(nameof(item));
+
+        history.Push((TypeAction.AddItem, item, Items.Count));
+        Items.Add(item)
 	}
 
 	public void RemoveItem(int index)
@@ -30,11 +31,22 @@ public class ListModel<TItem>
 
 	public bool CanUndo()
 	{
-		return false;
+        return history.Count > 0
 	}
 
 	public void Undo()
 	{
-		throw new NotImplementedException();
+        if (!CanUndo()) throw new InvalidOperationException("No action to undo items+");
+
+        var (action, item, index) = History.Pop();
+
+        if (action == TypeAction.AddItem)
+        {
+            Items.RemoveAt(index);
+        }
+        else
+        {
+            Items.Insert(index, item);
+        }
 	}
 }
