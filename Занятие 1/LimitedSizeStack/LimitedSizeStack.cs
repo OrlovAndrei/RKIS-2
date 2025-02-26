@@ -10,13 +10,22 @@ public class LimitedSizeStack<T>
 
 	public void Push(T item)
 	{
-		throw new NotImplementedException();
+    if (items.Length == 0) return;
+
+        items[top] = item;
+        top = (top + 1) % items.Length;
+
+        if (count < items.Length) count++;
 	}
 
 	public T Pop()
 	{
-		throw new NotImplementedException();
+    if (count == 0)
+            throw new ArgumentException("List is empty");
+
+        top = (items.Length + top - 1) % items.Length;
+        count--;
+        return items[top];
 	}
 
-	public int Count => throw new NotImplementedException();
-}
+public int Count => count;
