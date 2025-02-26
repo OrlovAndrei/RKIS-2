@@ -23,7 +23,7 @@ public class ListModel<TItem>
 		if (item == null) throw new ArgumentNullException(nameof(item));
 
 		history.Push((TypeAction.AddItem, item, Items.Count));
-		Items.Add(item)
+		Items.Add(item);
 	}
 
 	public void RemoveItem(int index)
