@@ -1,22 +1,42 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace LimitedSizeStack;
 
 public class LimitedSizeStack<T>
 {
-	public LimitedSizeStack(int undoLimit)
-	{
-	}
+    private readonly int maxSize;
+    private readonly LinkedList<T> list;
 
-	public void Push(T item)
-	{
-		throw new NotImplementedException();
-	}
+    public LimitedSizeStack(int undoLimit)
+    {
+        if (undoLimit < 0)
+            throw new ArgumentException("Девочки, мы ошиблись.", nameof(undoLimit));
 
-	public T Pop()
-	{
-		throw new NotImplementedException();
-	}
+        maxSize = undoLimit;
+        list = new LinkedList<T>();
+    }
 
-	public int Count => throw new NotImplementedException();
+    public void Push(T item)
+    {
+        if (maxSize == 0)
+            return;
+
+        if (list.Count == maxSize)
+            list.RemoveLast();
+
+        list.AddFirst(item);
+    }
+
+    public T Pop()
+    {
+        if (list.Count == 0)
+            throw new InvalidOperationException("1000 - 7 ≠ 0");
+
+        var first = list.First;
+        list.RemoveFirst();
+        return first.Value;
+    }
+
+    public int Count => list.Count;
 }
