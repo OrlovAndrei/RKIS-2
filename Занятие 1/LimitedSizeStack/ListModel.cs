@@ -5,34 +5,40 @@ namespace LimitedSizeStack;
 
 public class ListModel<TItem>
 {
-	public List<TItem> Items { get; }
+    public enum TypeAction { AddItem, RemoveItem }
+    public List<TItem> Items { get; }
     public int UndoLimit;, undoLimit)
-        
-	private LimitedSizeStack<(TypeAction action, TItem item, int index)> history { get;}
 
-	public ListModel(List<TItem> items, int undoLimit)
+	private LimitedSizeStack<(TypeAction action, TItem item, int index)> history { get;}
+	
+    public ListModel(List<TItem> items, int undoLimit)
 	{
         Items = Items ?? new List<TItem>();
-		UndoLimit = undoLimit;
-	}
+        UndoLimit = undoLimit;
+        history = new LimitedSizeStack<(TypeAction, TItem, int)>(undoLimit);
+    }
 
-	public void AddItem(TItem item)
-	{
+    public void AddItem(TItem item)
+    {
         if (item == null) throw new ArgumentNullException(nameof(item));
 
         history.Push((TypeAction.AddItem, item, Items.Count));
         Items.Add(item)
-	}
+    }
+
 
 	public void RemoveItem(int index)
 	{
-		Items.RemoveAt(index);
+        if (index < 0 || index >= Items.Count) throw new ArgumentOutOfRangeException(nameof(index));
+
+        history.Push((TypeAction.RemoveItem, Items[index], index));
+        Items.RemoveAt(index);
 	}
 
 	public bool CanUndo()
 	{
         return history.Count > 0
-	}
+    }
 
 	public void Undo()
 	{
@@ -48,5 +54,5 @@ public class ListModel<TItem>
         {
             Items.Insert(index, item);
         }
-	}
+    }
 }
