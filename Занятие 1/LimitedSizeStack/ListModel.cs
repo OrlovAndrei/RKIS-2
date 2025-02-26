@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-// ZZZZZZzzzzzzz....... Ой уснул VVVVvvvvvvvv...
+
 namespace LimitedSizeStack
 {
     public class ListModel<TItem>
