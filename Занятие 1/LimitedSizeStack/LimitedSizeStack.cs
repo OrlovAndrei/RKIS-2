@@ -16,7 +16,7 @@ public class LimitedSizeStack<T>
         maxSize = undoLimit;
         list = new LinkedList<T>();
     }
-
+/// ZVO RESPECT
     public void Push(T item)
     {
         if (maxSize == 0)
