@@ -5,51 +5,50 @@ namespace LimitedSizeStack;
 
 public class ListModel<TItem>
 {
-	public enum TypeAction { AddItem, RemoveItem }
-	public List<TItem> Items { get; }
-	public int UndoLimit;
+    public enum TypeAction { AddItem, RemoveItem }
 
-	private LimitedSizeStack<(TypeAction action, TItem item, int index)> history { get; }
-        
-	public ListModel(int undoLimit) : this(new List<TItem>(), undoLimit)
-	{
-		Items = Items ?? new List<TItem>();
-		UndoLimit = undoLimit;
-		history = new LimitedSizeStack<(TypeAction, TItem, int)>(undoLimit);
-	}
+    public List<TItem> Items { get; }
 
-	public void AddItem(TItem item)
-	{
-		if (item == null) throw new ArgumentNullException(nameof(item));
+    public int UndoLimit { get; }
 
-		history.Push((TypeAction.AddItem, item, Items.Count));
-		Items.Add(item);
-	}
+    private LimitedSizeStack<(TypeAction Action, TItem Item, int Index)> History { get; }
 
-	public void RemoveItem(int index)
-	{
-		if (index < 0 || index >= Items.Count) throw new ArgumentOutOfRangeException(nameof(index));
+    public ListModel(List<TItem>? items, int undoLimit)
+    {
+        Items = items ?? new List<TItem>();
+        UndoLimit = undoLimit;
+        History = new LimitedSizeStack<(TypeAction, TItem, int)>(undoLimit);
+    }
 
-		history.Push((TypeAction.RemoveItem, Items[index], index));
-		Items.RemoveAt(index);
-	}
+    public ListModel(int undoLimit) : this(null, undoLimit) { }
 
-	public bool CanUndo()
-	{
-		return history.Count > 0;
-	}
+    public void AddItem(TItem item)
+    {
+        if (item == null) throw new ArgumentNullException(nameof(item));
 
-	public void Undo()
-	{
-        if (!CanUndo()) throw new InvalidOperationException("No action to undo items+");
+        History.Push((TypeAction.AddItem, item, Items.Count));
+        Items.Add(item);
+    }
 
-        var (action, item, index) = history.Pop();
+    public void RemoveItem(int index)
+    {
+        if (index < 0 || index >= Items.Count) throw new ArgumentOutOfRangeException(nameof(index));
 
-        if (action == TypeAction.AddItem) {
+        History.Push((TypeAction.RemoveItem, Items[index], index));
+        Items.RemoveAt(index);
+    }
+
+    public bool CanUndo() => History.Count > 0;
+
+    public void Undo()
+    {
+        if (!CanUndo()) throw new InvalidOperationException("No actions to undo.");
+
+        var (action, item, index) = History.Pop();
+
+        if (action == TypeAction.AddItem)
             Items.RemoveAt(index);
-		} else
-        {
-			Items.Insert(index, item);
-        }
+        else
+            Items.Insert(index, item);
     }
 }
