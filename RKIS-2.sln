@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Занятие 1", "Занятие 1", "{1D7FEF1D-BBA4-4780-84F6-B7F32DE816DB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LimitedSizeStack", "Занятие 1\LimitedSizeStack\LimitedSizeStack.csproj", "{7EC80AAC-D137-41A1-A1BB-12FA2C8659E4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Занятие 2", "Занятие 2", "{FC158EFC-CDB4-4C99-8982-9747C96E5974}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "yield-return-smooth", "Занятие 2\Smooth\yield-return-smooth.csproj", "{FD9E70A8-8C1A-491A-A8FB-33252FC06679}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Занятие 3", "Занятие 3", "{89E283B4-1B87-45BF-86A0-B8D84EA57619}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hashes-readonly-bytes", "Занятие 3\readonly-bytes\hashes-readonly-bytes.csproj", "{68F4B465-712B-495E-9752-E7B102CC49B9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Занятие 4", "Занятие 4", "{FE9382DB-8430-44E8-B3ED-A35D432B3630}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filters", "Занятие 4\Filters\Filters.csproj", "{0B1116E5-72D2-40B0-A302-B0127DD7B4D3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7EC80AAC-D137-41A1-A1BB-12FA2C8659E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EC80AAC-D137-41A1-A1BB-12FA2C8659E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EC80AAC-D137-41A1-A1BB-12FA2C8659E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EC80AAC-D137-41A1-A1BB-12FA2C8659E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD9E70A8-8C1A-491A-A8FB-33252FC06679}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD9E70A8-8C1A-491A-A8FB-33252FC06679}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD9E70A8-8C1A-491A-A8FB-33252FC06679}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD9E70A8-8C1A-491A-A8FB-33252FC06679}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68F4B465-712B-495E-9752-E7B102CC49B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68F4B465-712B-495E-9752-E7B102CC49B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68F4B465-712B-495E-9752-E7B102CC49B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68F4B465-712B-495E-9752-E7B102CC49B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B1116E5-72D2-40B0-A302-B0127DD7B4D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B1116E5-72D2-40B0-A302-B0127DD7B4D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B1116E5-72D2-40B0-A302-B0127DD7B4D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B1116E5-72D2-40B0-A302-B0127DD7B4D3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7EC80AAC-D137-41A1-A1BB-12FA2C8659E4} = {1D7FEF1D-BBA4-4780-84F6-B7F32DE816DB}
+		{FD9E70A8-8C1A-491A-A8FB-33252FC06679} = {FC158EFC-CDB4-4C99-8982-9747C96E5974}
+		{68F4B465-712B-495E-9752-E7B102CC49B9} = {89E283B4-1B87-45BF-86A0-B8D84EA57619}
+		{0B1116E5-72D2-40B0-A302-B0127DD7B4D3} = {FE9382DB-8430-44E8-B3ED-A35D432B3630}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {88835994-33CD-4298-B9AC-E570545BAA06}
+	EndGlobalSection
+EndGlobal
