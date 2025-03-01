@@ -9,25 +9,25 @@ public class LimitedSizeStack<T>
     private int top = 0;
     private int count = 0;
 
-    public LimitedSizeStack(int undoLimit)
+    public LimitedSizeStack(int capacity)
     {
-        items = new T[undoLimit];
+        items = new T[capacity];
     }
 
     public void Push(T item)
     {
-        if (items.Length == 0) return;
-
+        if (items.Length == 0)
+            return;
         items[top] = item;
         top = (top + 1) % items.Length;
 
-        if (count < items.Length) count++;
+        if (count < items.Length)
+            count++;
     }
-
     public T Pop()
     {
         if (count == 0)
-        throw new ArgumentException("List is empty");
+            throw new System.InvalidOperationException("Stack is empty");
 
         top = (items.Length + top - 1) % items.Length;
         count--;
