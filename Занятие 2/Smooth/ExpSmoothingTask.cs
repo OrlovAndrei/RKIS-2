@@ -13,20 +13,18 @@ namespace yield
             {
                 var item = new DataPoint(point);
 
-                if (isCheked)
+                if (isChecked)
                 {
                     item = point.WithExpSmoothedY(value + alpha * (point.OriginalY - value));
                 }
-
                 else
                 {
                     item = point.WithExpSmoothedY(point.OriginalY);
-                    isCheked = true;
+                    isChecked = true; 
                 }
 
                 yield return item;
                 value = item.ExpSmoothedY;
-
             }
         }
     }
