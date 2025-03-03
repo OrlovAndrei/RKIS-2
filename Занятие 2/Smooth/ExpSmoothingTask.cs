@@ -7,7 +7,7 @@ namespace yield
         public static IEnumerable<DataPoint> SmoothExponentialy(this IEnumerable<DataPoint> data, double alpha)
         {
             var value = 0.0;
-            var isCheked = false;
+            var isCheñked = false;
 
             foreach (var point in data)
             {
@@ -21,7 +21,7 @@ namespace yield
                 else
                 {
                     item = point.WithExpSmoothedY(point.OriginalY);
-                    isCheked = true;
+                    isCheñked = true;
                 }
 
                 yield return item;
