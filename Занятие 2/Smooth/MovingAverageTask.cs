@@ -5,38 +5,29 @@ namespace yield;
 
 public static class MovingAverageTask
 {
-	public static IEnumerable<DataPoint> MovingAverage(this IEnumerable<DataPoint> data, int windowWidth)
-	{
+    public static IEnumerable<DataPoint> MovingAverage(this IEnumerable<DataPoint> data, int windowWidth)
+    {
         if (windowWidth <= 0)
-            throw new ArgumentOutOfRangeException(nameof(windowWidth), "Window size must be greater than zero.");
+            throw new System.ArgumentOutOfRangeException();
+        Queue<double> recentValues = new Queue<double>();
+        double totalSum = 0;
+        double smoothedValue = 0;
 
-        int currentIndex = 0;
-
-        LinkedList<double> potentialMaxValues = new LinkedList<double>();
-        Queue<double> slidingWindow = new Queue<double>();
-
-        foreach (var point in data)
+        foreach (var dataPoint in data)
         {
-            if (currentIndex < windowWidth)
+            if (recentValues.Count < windowWidth)
             {
-                slidingWindow.Enqueue(point.OriginalY);
-                currentIndex++;
+                totalSum += dataPoint.OriginalY;
+                smoothedValue = totalSum / (recentValues.Count + 1);
             }
             else
             {
-                if (potentialMaxValues.Count > 0 && potentialMaxValues.First.Value == slidingWindow.Dequeue())
-                    potentialMaxValues.RemoveFirst();
+                smoothedValue += (dataPoint.OriginalY - recentValues.Dequeue()) / windowWidth;
             }
 
-            slidingWindow.Enqueue(point.OriginalY);
-
-            while (potentialMaxValues.Count > 0 && potentialMaxValues.Last.Value <= point.OriginalY)
-                potentialMaxValues.RemoveLast();
-
-            potentialMaxValues.AddLast(point.OriginalY);
-
-            var smoothedPoint = point.WithMaxY(potentialMaxValues.First.Value);
-            yield return smoothedPoint;
+            var updatedDataPoint = dataPoint.WithAvgSmoothedY(smoothedValue);
+            yield return updatedDataPoint;
+            recentValues.Enqueue(dataPoint.OriginalY);
         }
 
 
