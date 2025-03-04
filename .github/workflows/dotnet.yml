@@ -11,22 +11,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: ⚙️ Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 6.0.x
 
-      - name: Build and restore all projects with error annotations
+      - name: 🔨 Build all projects
         continue-on-error: true
         run: |
           build_failed=false
-          mapfile -t projects < <(find ./Занятие\ 1 -name '*.csproj')
+          mapfile -t projects < <(find ./Занятие\ 1 ./Занятие\ 2 ./Занятие\ 3 ./Занятие\ 4 -name '*.csproj')
 
           for project in "${projects[@]}"; do
-            echo "Restoring dependencies for project: \"$project\""
+            echo "📦 Restoring dependencies for project: \"$project\""
             dotnet restore "$project"
 
-            echo "Building project: \"$project\""
+            echo "🚀 Building project: \"$project\""
             build_output=$(dotnet build "$project" --no-restore || true)
 
             if [[ $build_output == *"error"* ]]; then
@@ -43,52 +43,59 @@ jobs:
               fi
             done
           done
+
           echo "build_failed=$build_failed" >> $GITHUB_ENV
-          echo "$build_failed"
-
-      - name: Run tests and report failures
-        run: |
-          # Массив для всех проектов
-          mapfile -t test_projects < <(find ./Занятие\ 1 -name '*.csproj')
-      
-          # Выполнение тестов для каждого проекта
-          test_failed=false
-          for test_project in "${test_projects[@]}"; do
-            echo "Running tests for: \"$test_project\""
-      
-            # Запуск тестов и сохранение вывода
-            test_output=$(dotnet test "$test_project" --no-restore --no-build)
-      
-            # Проверка на наличие неудачных тестов в выводе
-            if echo "$test_output" | grep -q "Failed"; then
-              test_failed=true
-              echo "Test failures found for $test_project"
-      
-              # Извлекаем неудачные тесты и их сообщения
-              echo "$test_output" | grep -E '(\[.*\] .*)' | while read -r line; do
-                # Это регулярное выражение для извлечения информации о тесте
-                if [[ "$line" =~ (.*) ]]; then
-                  test_name="${BASH_REMATCH[1]}"
-                  # Аннотируем ошибку в GitHub Actions с ссылкой на тест
-                  echo "::error file=$test_project::$test_name failed"
-                fi
-              done
-            fi
-          done
-      
-          if [ "$test_failed" = true ]; then
-            echo "Tests failed. See errors above."
-            exit 1
-          fi
-
-      - name: Final Check
-        run: |
           if [[ "$build_failed" == "true" ]]; then
-            echo "Build failed due to errors in the projects."
-            exit 1
-          elif [[ "$test_failed" == "true" ]]; then
-            echo "Some tests have failed. The workflow will now fail."
-            exit 1
+            echo "❌ Build failed!"
           else
-            echo "Build and tests completed successfully without errors."
+            echo "✅ Build successful!"
           fi
+
+      - name: 🧪 Run all tests
+        run: |
+          test_failed=false
+          mapfile -t test_projects < <(find ./Занятие\ 1 ./Занятие\ 2 ./Занятие\ 3 ./Занятие\ 4 -name '*.csproj')
+
+          for test_project in "${test_projects[@]}"; do
+            echo "🔬 Running tests for: \"$test_project\""
+            test_output=$(dotnet test "$test_project" --no-restore --no-build --logger "console;verbosity=normal" 2>&1 || true)
+
+            #if echo "$test_output" | grep -q "Failed!"; then
+              #test_failed=true
+              #echo "❌ Some tests failed!"
+              
+            failed_tests_count=$(echo "$test_output" | grep -Eo "Failed:[[:space:]]+[0-9]+" | awk '{print $2}')
+            if [[ "$failed_tests_count" -gt 0 ]]; then
+              test_failed=true
+              echo "❌ $failed_tests_count tests failed!"
+
+              while IFS= read -r line; do
+                if [[ "$line" =~ ^\s*Failed\s+(.*)\s+\[ ]]; then
+                  test_name="${BASH_REMATCH[1]}"
+                  echo "::error title=Test Failed::$test_name"
+                fi
+              done <<< "$test_output"
+            fi
+
+            echo "$test_output"
+          done
+
+          echo "test_failed=$test_failed" >> "$GITHUB_ENV"
+
+      - name: ✅ Final Check
+        run: |
+          echo "🔎 Checking build and test results..."
+          echo "Build failed: $build_failed"
+          echo "Tests failed: $test_failed"
+
+          if [[ "$build_failed" == "true" ]]; then
+            echo "❌ Build failed. Exiting with error."
+            exit 1
+          fi
+
+          if [[ "$test_failed" == "true" ]]; then
+            echo "❌ Some tests have failed. Exiting with error."
+            exit 1
+          fi
+
+          echo "✅ Build and tests completed successfully!"
