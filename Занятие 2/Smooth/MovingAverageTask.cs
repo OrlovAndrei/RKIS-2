@@ -1,26 +1,29 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace yield
 {
-    public static class MovingMaxTask
-    {
-    }
-
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            var data = new List<int> { 2, 6, 2, 1, 3, 2, 5, 8, 1 };
-            var windowWidth = 5;
-
-            var movingMax = data.MovingMax(windowWidth);
-
-            foreach (var max in movingMax)
-            {
-                Console.WriteLine(max);
-            }
-        }
-    }
+	public static class MovingAverageTask
+	{
+		public static IEnumerable<DataPoint> MovingAverage(this IEnumerable<DataPoint> data, int windowWidth)
+		{
+			if (windowWidth <= 0)
+				throw new System.ArgumentOutOfRangeException();
+			Queue<double> lastYs = new Queue<double>();
+			double sum = 0;
+			double result = 0;
+			foreach (var dataPoint in data)
+			{
+				if (lastYs.Count < windowWidth)
+				{
+					sum += dataPoint.OriginalY;
+					result = sum / (lastYs.Count + 1);
+				}
+				else
+					result += (dataPoint.OriginalY - lastYs.Dequeue()) / windowWidth;
+				var newDataPoint = dataPoint.WithAvgSmoothedY(result);
+				yield return newDataPoint;
+				lastYs.Enqueue(dataPoint.OriginalY);
+			}
+		}
+	}
 }
