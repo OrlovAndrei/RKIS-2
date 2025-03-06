@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Занятие 1", "Занятие 1", "{644AF158-680B-F292-861B-AC6BDC043751}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Занятие 2", "Занятие 2", "{FA8EB464-3446-3CEE-FD2B-1A4EE0001377}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Занятие 3", "Занятие 3", "{7B5A8A50-45BD-9728-59F2-9BA55180C5A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Занятие 4", "Занятие 4", "{C24F4EFD-F2DA-8F0C-4013-EA21123628AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LimitedSizeStack", "Занятие 1\LimitedSizeStack\LimitedSizeStack.csproj", "{6F465A6C-F08D-5BA9-9100-1AF23DCF0980}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yield-return-smooth", "Занятие 2\Smooth\yield-return-smooth.csproj", "{70854F6E-E09D-C387-EE21-5E6D38935767}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hashes-readonly-bytes", "Занятие 3\readonly-bytes\hashes-readonly-bytes.csproj", "{CDEBA612-F984-9AA4-7BBE-C6880782ACAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filters", "Занятие 4\Filters\Filters.csproj", "{D646B665-D001-2A69-838F-FD1D48BA33FD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6F465A6C-F08D-5BA9-9100-1AF23DCF0980}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F465A6C-F08D-5BA9-9100-1AF23DCF0980}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F465A6C-F08D-5BA9-9100-1AF23DCF0980}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F465A6C-F08D-5BA9-9100-1AF23DCF0980}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70854F6E-E09D-C387-EE21-5E6D38935767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70854F6E-E09D-C387-EE21-5E6D38935767}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70854F6E-E09D-C387-EE21-5E6D38935767}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70854F6E-E09D-C387-EE21-5E6D38935767}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDEBA612-F984-9AA4-7BBE-C6880782ACAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDEBA612-F984-9AA4-7BBE-C6880782ACAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDEBA612-F984-9AA4-7BBE-C6880782ACAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDEBA612-F984-9AA4-7BBE-C6880782ACAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D646B665-D001-2A69-838F-FD1D48BA33FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D646B665-D001-2A69-838F-FD1D48BA33FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D646B665-D001-2A69-838F-FD1D48BA33FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D646B665-D001-2A69-838F-FD1D48BA33FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6F465A6C-F08D-5BA9-9100-1AF23DCF0980} = {644AF158-680B-F292-861B-AC6BDC043751}
+		{70854F6E-E09D-C387-EE21-5E6D38935767} = {FA8EB464-3446-3CEE-FD2B-1A4EE0001377}
+		{CDEBA612-F984-9AA4-7BBE-C6880782ACAB} = {7B5A8A50-45BD-9728-59F2-9BA55180C5A5}
+		{D646B665-D001-2A69-838F-FD1D48BA33FD} = {C24F4EFD-F2DA-8F0C-4013-EA21123628AB}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {005279E6-F5FA-47C9-8B99-0FF57FB53D2D}
+	EndGlobalSection
+EndGlobal
