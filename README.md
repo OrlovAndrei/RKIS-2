@@ -1,4 +1,4 @@
-[Ссылка на таблицу с баллами]()
+[Ссылка на таблицу с баллами](https://docs.google.com/spreadsheets/d/13Y9ltoQjbEBExycbLLwomCm4XH_2bqPzbUZJqALQbzE)
 
 Оформление названий коммитов: `<lesson>: <action> <task>`
 
