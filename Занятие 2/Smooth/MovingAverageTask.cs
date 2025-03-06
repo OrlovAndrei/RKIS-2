@@ -6,36 +6,6 @@ namespace yield
 {
     public static class MovingMaxTask
     {
-        public static IEnumerable<int> MovingMax(this IEnumerable<int> data, int windowWidth)
-        {
-            LinkedList<int> deque = new LinkedList<int>();  
-            int index = 0;
-
-            foreach (var value in data)
-            {
-                
-                if (deque.Count > 0 && deque.First.Value <= index - windowWidth)
-                {
-                    deque.RemoveFirst();
-                }
-
-                
-                while (deque.Count > 0 && data.ElementAt(deque.Last.Value) <= value)
-                {
-                    deque.RemoveLast();
-                }
-
-               
-                deque.AddLast(index);
-
-                if (index >= windowWidth - 1)
-                {
-                    yield return data.ElementAt(deque.First.Value);
-                }
-
-                index++;
-            }
-        }
     }
 
     class Program
