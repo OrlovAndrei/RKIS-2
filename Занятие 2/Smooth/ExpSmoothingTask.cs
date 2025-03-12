@@ -8,7 +8,7 @@ public static class ExpSmoothingTask
 	{
 		double smoothedValue = null;
 
-		foreach (point in data){
+		foreach (var point in data){
 			if(smoothedValue == null){
 				smoothedValue = point.OriginalY; //Если значение первое, сглаживание равно значению
 			}else{
