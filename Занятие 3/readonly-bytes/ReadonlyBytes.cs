@@ -8,12 +8,14 @@ namespace hashes
     public class ReadonlyBytes : IReadOnlyList<byte>
     {
         readonly byte[] array;
+
         int hash;
+        
         public ReadonlyBytes(params byte[] array)
         {
             if (array == null)
-                throw new ArgumentNullException(nameof(array)); 
-            
+                throw new ArgumentNullException(nameof(array));
+
             this.array = new byte[array.Length];
             for (int i = 0; i < array.Length; i++)
                 this.array[i] = array[i]; 
@@ -58,8 +60,31 @@ namespace hashes
             int hashCode = -985847861;
             if (array != null)
                 foreach (byte number in array)
-                    hashCode = unchecked(hashCode * -1521134295 + number.GetHashCode()); // Хэширование каждого элемента
+                    hashCode = unchecked(hashCode * -1521134295 + number.GetHashCode());
             return hashCode;
         }
-	}
+	 public override int GetHashCode() => hash;
+
+        public override string ToString()
+        {
+            string output = "[";
+            if (array.Length > 0)
+            {
+                foreach (byte number in array)
+                    output += number + ", ";
+                output = output.Remove(output.Length - 2);
+            }
+            return output += "]";
+        }
+
+        public IEnumerator<byte> GetEnumerator()
+        {
+            return ((IReadOnlyList<byte>)array).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
 }
