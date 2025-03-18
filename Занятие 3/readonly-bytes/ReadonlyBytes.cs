@@ -62,3 +62,28 @@ public class ReadonlyBytes : IReadOnlyList<byte>
                     hashCode = unchecked(hashCode * -1521134295 + number.GetHashCode());
             return hashCode;
         }
+        public override int GetHashCode() => hash;
+
+        public override string ToString()
+        {
+            string output = "[";
+            if (array.Length > 0)
+            {
+                foreach (byte number in array)
+                    output += number + ", ";
+                output = output.Remove(output.Length - 2);
+            }
+            return output += "]";
+        }
+
+        public IEnumerator<byte> GetEnumerator()
+        {
+            return ((IReadOnlyList<byte>)array).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+}
