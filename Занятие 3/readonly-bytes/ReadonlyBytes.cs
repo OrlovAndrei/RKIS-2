@@ -38,3 +38,27 @@ public class ReadonlyBytes : IReadOnlyList<byte>
         public int Length => ((IReadOnlyList<byte>)array).Count;
 
         bool Equals(ReadonlyBytes other)
+{
+            if (other == null || Length != other.Length)
+                return false;
+            for (int i = 0; i < Length; i++)
+                if (this[i] != other[i])
+                    return false;
+            return true;
+        }
+
+        public override bool Equals(object other)
+        {
+            if (other == null || GetType() != other.GetType())
+                return false;
+            return this.Equals((ReadonlyBytes)other);
+        }
+
+        int CalculateHashCode()
+        {
+            int hashCode = -985847861;
+            if (array != null)
+                foreach (byte number in array)
+                    hashCode = unchecked(hashCode * -1521134295 + number.GetHashCode());
+            return hashCode;
+        }
