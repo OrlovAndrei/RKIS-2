@@ -18,3 +18,23 @@ public class ReadonlyBytes : IReadOnlyList<byte>
                 this.array[i] = array[i];
             hash = CalculateHashCode();
         }
+
+    public byte this[int index]
+        {
+            get
+            {
+                try
+                {
+                    return ((IReadOnlyList<byte>)array)[index];
+                }
+                catch (Exception e)
+                {
+                    throw new IndexOutOfRangeException(e.Message, e);
+                }
+            }
+        }
+
+        int IReadOnlyCollection<byte>.Count => ((IReadOnlyList<byte>)array).Count;
+        public int Length => ((IReadOnlyList<byte>)array).Count;
+
+        bool Equals(ReadonlyBytes other)
