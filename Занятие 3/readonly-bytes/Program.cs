@@ -1,14 +1,11 @@
-﻿using System.Collections.Generic;
-using NUnitLite;
-using System.Linq;
+﻿using NUnitLite;
 
-namespace hashes
+namespace hashes;
+
+class Program
 {
-    class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            new AutoRun().Execute(args);
-        }
+        new AutoRun().Execute(args);
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 
 namespace hashes
-{
+{ 
     [TestFixture]
     public class ReadonlyBytesTests
     {
@@ -66,7 +66,7 @@ namespace hashes
         public void EqualOnSameBytes()
         {
             // ReSharper disable EqualExpressionComparison
-            Assert.IsTrue(new ReadonlyBytes(Array.Empty<byte>()).Equals(new ReadonlyBytes(Array.Empty<byte>())));
+            Assert.IsTrue(new ReadonlyBytes(new byte[0]).Equals(new ReadonlyBytes(new byte[0])));
             Assert.IsTrue(new ReadonlyBytes(100).Equals(new ReadonlyBytes(100)));
             Assert.IsTrue(new ReadonlyBytes(1, 2, 3).Equals(new ReadonlyBytes(1, 2, 3)));
             var items = new ReadonlyBytes(4, 2, 67, 1);

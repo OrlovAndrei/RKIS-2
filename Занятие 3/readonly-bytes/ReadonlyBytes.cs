@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace hashes
 {
     public class ReadonlyBytes : IReadOnlyList<byte>
