@@ -14,12 +14,13 @@
 
         public static Func<Product, bool> FilterByStock(int minStock)
         {
-            return product => product.Stock >= minStock;
+            return product => product.StockCount >= minStock;
         }
 
         public static Func<Product, bool> FilterByExpirationDate(DateTime date)
         {
-            return product => !product.ExpirationDate.HasValue || product.ExpirationDate.Value >= date;
+            return product => product.ExpirationDate == null ||
+                     (product.ProductionDate + product.ExpirationDate.Value) >= date;
         }
 
         public static Func<Product, bool> FilterByNameContains(string namePart)
