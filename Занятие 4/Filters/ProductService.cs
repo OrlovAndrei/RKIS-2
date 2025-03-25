@@ -18,25 +18,49 @@ namespace Filters
 
             return filteredProducts;
         }
-        //напишите методы Not, And, Or и Xor
+        // Метод Not
         public static Func<Product, bool> Not(Func<Product, bool> filter)
         {
             return product => !filter(product);
         }
-
+        // Метод And (логическое И)
         public static Func<Product, bool> And(params Func<Product, bool>[] filters)
         {
-            return product => filters.All(filter => filter(product));
+            return product =>
+            {
+                foreach (var filter in filters)
+                {
+                    if (!filter(product)) return false; // Если хотя бы один фильтр не проходит, возвращаем false
+                }
+                return true;
+            };
         }
-
+        // Метод Or (логическое ИЛИ)
         public static Func<Product, bool> Or(params Func<Product, bool>[] filters)
         {
-            return product => filters.Any(filter => filter(product));
+            return product =>
+            {
+                foreach (var filter in filters)
+                {
+                    if (filter(product)) return true; // Если хотя бы один фильтр проходит, возвращаем true
+                }
+                return false;
+            };
         }
-
+        // Метод Xor (исключающее ИЛИ)
         public static Func<Product, bool> Xor(params Func<Product, bool>[] filters)
         {
-            return product => filters.Count(filter => filter(product)) == 1;
+            return product =>
+            {
+                int trueCount = 0;
+
+                foreach (var filter in filters)
+                {
+                    if (filter(product)) trueCount++;
+                }
+
+                return trueCount == 1; // Должно быть ровно одно совпадение
+            };
         }
     }
 }

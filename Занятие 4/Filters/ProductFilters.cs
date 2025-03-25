@@ -6,7 +6,7 @@ namespace Filters
     {
         public static Func<Product, bool> FilterByCategory(Category category)
         {
-            return product => product.Category.Name == category.Name;
+            return product => product.Category == category;
         }
 
         public static Func<Product, bool> FilterByPrice(decimal minPrice, decimal maxPrice)
@@ -16,12 +16,12 @@ namespace Filters
 
         public static Func<Product, bool> FilterByStock(int minStock)
         {
-            return product => product.Stock >= minStock;
+            return product => product.StockCount >= minStock;
         }
 
-        public static Func<Product, bool> FilterByExpirationDate(DateTime date)
+        public static Func<Product, bool> FilterByExpirationDate(DateTime currentDate)
         {
-            return product => !product.ExpirationDate.HasValue || product.ExpirationDate.Value >= date;
+            return product => !product.ExpirationDate.HasValue ||  product.ProductionDate + product.ExpirationDate.Value >= currentDate;
         }
 
         public static Func<Product, bool> FilterByNameContains(string namePart)
