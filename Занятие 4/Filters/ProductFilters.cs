@@ -16,23 +16,25 @@
         {
             return product => product.StockCount >= minStock;
         }
-        public static Func<Product, bool> FilterByExpirationDate(DateTime date)
+
+ public static Func<Product, bool> FilterByExpirationDate(DateTime date)
         {
-            return product =>
+ return product =>
             {
                 if (!product.ExpirationDate.HasValue)
                 {
-                    return true;
+ return true;
                 }
 
-                DateTime expirationDate = DateTime.Now.Add(product.ExpirationDate.Value);
+ DateTime expirationDate = DateTime.Now.Add(product.ExpirationDate.Value);
 
-                return expirationDate >= date;
+ return expirationDate >= date;
             };
         }
-        public static Func<Product, bool> FilterByNameContains(string namePart)
+
+ public static Func<Product, bool> FilterByNameContains(string namePart)
         {
-            return product => product.Name.Contains(namePart, StringComparison.OrdinalIgnoreCase);
+ return product => product.Name.Contains(namePart, StringComparison.OrdinalIgnoreCase);
         }
     }
 }
