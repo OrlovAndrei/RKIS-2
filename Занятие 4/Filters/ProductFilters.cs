@@ -1,6 +1,8 @@
-﻿namespace Filters
+using System;
+
+namespace Filters
 {
-	public static class ProductFilters
+    public static class ProductFilters
     {
         public static Func<Product, bool> FilterByCategory(Category category)
         {
@@ -14,12 +16,12 @@
 
         public static Func<Product, bool> FilterByStock(int minStock)
         {
-            return product => product.Stock >= minStock;
+            return product => product.StockCount >= minStock;
         }
 
-        public static Func<Product, bool> FilterByExpirationDate(DateTime date)
+        public static Func<Product, bool> FilterByExpirationDate(DateTime currentDate)
         {
-            return product => !product.ExpirationDate.HasValue || product.ExpirationDate.Value >= date;
+            return product => !product.ExpirationDate.HasValue ||  product.ProductionDate + product.ExpirationDate.Value >= currentDate;
         }
 
         public static Func<Product, bool> FilterByNameContains(string namePart)
