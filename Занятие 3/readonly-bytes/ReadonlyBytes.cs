@@ -4,88 +4,81 @@ using System.Collections.Generic;
 
 namespace hashes
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-
-    namespace hashes
+    public class ReadonlyBytes : IEnumerable<byte>
     {
-        public class ReadonlyBytes : IEnumerable<byte>
+        private readonly byte[] _bytes;
+        private int? _hashCode;
+
+        public ReadonlyBytes(params byte[] bytes)
         {
-            private readonly byte[] _data;
-            private int? _cachedHashCode;
+            if (bytes == null)
+                throw new ArgumentNullException(nameof(bytes));
 
-            public ReadonlyBytes(params byte[] bytes)
+            _bytes = new byte[bytes.Length];
+            Array.Copy(bytes, _bytes, bytes.Length);
+        }
+
+        public int Length => _bytes.Length;
+
+        public byte this[int index]
+        {
+            get
             {
-                if (bytes == null)
-                    throw new ArgumentNullException(nameof(bytes));
-
-                _data = (byte[])bytes.Clone();
-            }
-
-            public int Length => _data.Length;
-
-            public byte this[int index]
-            {
-                get
-                {
-                    if (index < 0  index >= _data.Length)
+                if (index < 0 || index >= _bytes.Length)
                     throw new IndexOutOfRangeException();
 
-                    return _data[index];
-                }
+                return _bytes[index];
             }
+        }
 
-            public override bool Equals(object obj)
-            {
-                if (obj == null  obj.GetType() != typeof(ReadonlyBytes))
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
                 return false;
 
-                var other = (ReadonlyBytes)obj;
+            var other = (ReadonlyBytes)obj;
+            if (_bytes.Length != other._bytes.Length)
+                return false;
 
-                if (_data.Length != other.Length)
+            for (int i = 0; i < _bytes.Length; i++)
+            {
+                if (_bytes[i] != other._bytes[i])
                     return false;
-
-                for (int i = 0; i < _data.Length; i++)
-                {
-                    if (_data[i] != other[i])
-                        return false;
-                }
-
-                return true;
             }
 
-            public override int GetHashCode()
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            if (_hashCode.HasValue)
+                return _hashCode.Value;
+
+            const int FNV_prime = 16777619;
+            int hash = -2128831035;
+
+            for (int i = 0; i < _bytes.Length; i++)
             {
-                if (_cachedHashCode.HasValue)
-                    return _cachedHashCode.Value;
-
-                const int FNV_prime = 16777619;
-                int hash = -2128831035; // FNV offset basis
-
-                for (int i = 0; i < _data.Length; i++)
-                {
-                    hash = (hash ^ _data[i]) * FNV_prime;
-                }
-
-                _cachedHashCode = hash;
-                return hash;
+                hash = (hash ^ _bytes[i]) * FNV_prime;
             }
 
-            public override string ToString()
-            {
-                return $"[{string.Join(", ", _data)}]";
-            }
+            _hashCode = hash;
+            return hash;
+        }
 
-            public IEnumerator<byte> GetEnumerator()
-            {
-                return ((IEnumerable<byte>)_data).GetEnumerator();
-            }
+        public override string ToString()
+        {
+            return $"[{string.Join(", ", _bytes)}]";
+        }
 
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
+        public IEnumerator<byte> GetEnumerator()
+        {
+            return ((IEnumerable<byte>)_bytes).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
