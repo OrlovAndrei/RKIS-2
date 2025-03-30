@@ -8,7 +8,7 @@ public static class MovingMaxTask
 {
     public static IEnumerable<DataPoint> MovingMax(this IEnumerable<DataPoint> data, int windowWidth)
     {
-        if (windowWidth <= 0) throw new ArgumentException("Øèðèíà îêíà äîëæíà áûòü ïîëîæèòåëüíîé.", nameof(windowWidth));
+        if (windowWidth <= 0) throw new ArgumentException("Ширина окна должна быть положительной.", nameof(windowWidth));
 
         var window = new LinkedList<double>();
         var queue = new Queue<DataPoint>();
