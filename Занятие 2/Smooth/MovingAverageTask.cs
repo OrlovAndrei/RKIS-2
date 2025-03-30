@@ -2,7 +2,9 @@ using System.Collections.Generic;
 
 namespace yield;
 
-public static IEnumerable<DataPoint> MovingAverage(this IEnumerable<DataPoint> data, int windowWidth)
+public static class MovingAverageTask
+{
+    public static IEnumerable<DataPoint> MovingAverage(this IEnumerable<DataPoint> data, int windowWidth)
     {
         var values = new List<double>();
 
