@@ -5,7 +5,7 @@ namespace Bank
 {
 	public class BankAccount
 	{
-		//
+		////
 		public Guid Id { get; } = Guid.NewGuid();
 
 		public decimal GetBalance()
