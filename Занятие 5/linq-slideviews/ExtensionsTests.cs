@@ -89,8 +89,8 @@ public class ExtensionsTests
 		for (var index = 0; index < count - 1; index++)
 		{
 			var tuple = actual[index];
-			Assert.That(tuple.First, Is.EqualTo(100 + index));
-			Assert.That(tuple.Second, Is.EqualTo(101 + index));
+			Assert.That(tuple.Item1, Is.EqualTo(100 + index));
+			Assert.That(tuple.Item2, Is.EqualTo(101 + index));
 		}
 	}
 
