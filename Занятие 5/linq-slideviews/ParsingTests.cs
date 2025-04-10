@@ -8,8 +8,8 @@ namespace linq_slideviews;
 [TestFixture]
 public class ParsingTests
 {
-	private string slidesHeaderLine = "SlideId;SlideType;UnitTitle";
-	private string visitsHeaderLine = "UserId;SlideId;Date;Time";
+	private string slidesHeaderLine = "SlideId;UnitTitle;SlideType";
+	private string visitsHeaderLine = "UserId;SlideId;Time;Date";
 
 	[Test]
 	public void ParseEmptySlides()
@@ -36,7 +36,7 @@ public class ParsingTests
 	public void ParseSeveralSlides()
 	{
 		var dict =
-			ParsingTask.ParseSlideRecords(new[] { slidesHeaderLine, "42;exercise;title", "1;quiz;title2" });
+			ParsingTask.ParseSlideRecords(new[] { slidesHeaderLine, "42;title;exercise", "1;title2;quiz" });
 		Assert.That(dict, Has.Count.EqualTo(2));
 		Assert.That(dict[42], Is.EqualTo(new SlideRecord(42, SlideType.Exercise, "title")));
 		Assert.That(dict[1], Is.EqualTo(new SlideRecord(1, SlideType.Quiz, "title2")));
@@ -45,7 +45,7 @@ public class ParsingTests
 	[Test]
 	public void ParseSingleSlide()
 	{
-		var dict = ParsingTask.ParseSlideRecords(new[] { slidesHeaderLine, "42;exercise;title" });
+		var dict = ParsingTask.ParseSlideRecords(new[] { slidesHeaderLine, "42;title;exercise" });
 		Assert.That(dict, Has.Count.EqualTo(1));
 		Assert.That(dict[42], Is.EqualTo(new SlideRecord(42, SlideType.Exercise, "title")));
 	}
@@ -65,23 +65,23 @@ public class ParsingTests
 	[Test]
 	public void ParseVisits_Fails_OnIncorrectDate()
 	{
-		var lines = new[] { visitsHeaderLine, "1;2;2000-13-30;12:00:00" };
+		var lines = new[] { visitsHeaderLine, "1;2;12:00:00;2000-13-30" };
 		var exception = Assert.Throws<FormatException>(() =>
 			ParsingTask.ParseVisitRecords(lines, new Dictionary<int, SlideRecord>()).ToList()
 		);
 
-		Assert.That(exception.Message, Is.EqualTo("Wrong line [1;2;2000-13-30;12:00:00]"));
+		Assert.That(exception.Message, Is.EqualTo("Wrong line [1;2;12:00:00;2000-13-30]"));
 	}
 
 	[Test]
 	public void ParseVisits_Fails_OnIncorrectTime()
 	{
-		var lines = new[] { visitsHeaderLine, "1;2;2000-01-30;27:99:00" };
+		var lines = new[] { visitsHeaderLine, "1;2;27:99:00;2000-01-30" };
 		var exception = Assert.Throws<FormatException>(() =>
 			ParsingTask.ParseVisitRecords(lines, new Dictionary<int, SlideRecord>()).ToList()
 		);
 
-		Assert.That(exception.Message, Is.EqualTo("Wrong line [1;2;2000-01-30;27:99:00]"));
+		Assert.That(exception.Message, Is.EqualTo("Wrong line [1;2;27:99:00;2000-01-30]"));
 	}
 
 	[Test]
@@ -91,10 +91,10 @@ public class ParsingTests
 			new[]
 			{
 				visitsHeaderLine,
-				"1;2;2000-01-30;12:00:00",
-				"2;2;2000-01-31;12:01:00",
-				"1;3;2000-01-29;01:00:00",
-				"3;4;2000-02-01;09:10:11"
+				"1;2;12:00:00;2000-01-30",
+				"2;2;12:01:00;2000-01-31",
+				"1;3;01:00:00;2000-01-29",
+				"3;4;09:10:11;2000-02-01"
 			},
 			new Dictionary<int, SlideRecord>
 			{
