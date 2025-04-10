@@ -6,7 +6,7 @@ namespace linq_slideviews;
 
 public static class ExtensionsTask
 {
-    public static double Median(this IEnumerable<double> items)
+    public static double GetMedian(this IEnumerable<double> items)
     {
         if (items == null)
             throw new ArgumentNullException(nameof(items));
@@ -28,7 +28,7 @@ public static class ExtensionsTask
         }
     }
 
-    public static IEnumerable<(T First, T Second)> Bigrams<T>(this IEnumerable<T> items)
+    public static IEnumerable<(T First, T Second)> GetBigrams<T>(this IEnumerable<T> items)
     {
         if (items == null)
             throw new ArgumentNullException(nameof(items));
