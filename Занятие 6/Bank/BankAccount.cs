@@ -1,25 +1,25 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Bank
+﻿namespace Bank
 {
-	public class BankAccount
-	{
-		public Guid Id { get; } = Guid.NewGuid();
+        public class BankAccount
+        {
+                public Guid Id { get; } = Guid.NewGuid();
+                private decimal balance;
 
-		public decimal GetBalance()
-		{
-			throw new NotImplementedException();
-		}
+                public decimal GetBalance()
+                {
+                        return balance;
+                }
 
-		public async Task DepositAsync(decimal amount)
-		{
-			throw new NotImplementedException();
-		}
+                public async Task DepositAsync(decimal amount)
+                {
+                        await Task.Delay(100);
+                        balance += amount;
+                }
 
-		public async Task WithdrawAsync(decimal amount)
-		{
-			throw new NotImplementedException();
-		}
-	}
+                public async Task WithdrawAsync(decimal amount)
+                {
+                        await Task.Delay(100);
+                        balance -= amount;
+                }
+        }
 }
