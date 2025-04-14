@@ -2,7 +2,7 @@
 
 namespace linq_slideviews;
 
-public record VisitRecord(int UserId, int SlideId, DateTime DateTime, SlideType SlideType)
+public record VisitRecord(int UserId, int SlideId, TimeSpan DateTime, DateTime SlideType)
 {
 	public override string ToString() =>
 		$"{nameof(UserId)}: {UserId}, {nameof(SlideId)}: {SlideId}, {nameof(SlideType)}: {SlideType}, {nameof(DateTime)}: {DateTime}";
