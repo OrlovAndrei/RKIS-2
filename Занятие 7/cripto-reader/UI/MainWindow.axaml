@@ -1,0 +1,18 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="cripto_reader.UI.MainWindow"
+        Title="AES File Encryptor">
+    <StackPanel Margin="15" Spacing="10">
+        <TextBox Name="FileNameTextBox" Watermark="Введите имя файла"/>
+        
+        <TextBox Name="ContentTextBox" Watermark="Введите текст" 
+                 AcceptsReturn="True" Height="100"/>
+                 
+        <TextBox Name="KeyTextBox" Watermark="Введите ключ"/>
+        
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <Button Content="Зашифровать" Click="EncryptButton_Click"/>
+            <Button Content="Расшифровать" Click="DecryptButton_Click"/>
+        </StackPanel>
+    </StackPanel>
+</Window>
