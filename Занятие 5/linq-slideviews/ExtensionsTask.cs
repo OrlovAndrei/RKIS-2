@@ -6,23 +6,43 @@ namespace linq_slideviews;
 
 public static class ExtensionsTask
 {
-	/// <summary>
-	/// Медиана списка из нечетного количества элементов — это серединный элемент списка после сортировки.
-	/// Медиана списка из четного количества элементов — это среднее арифметическое 
-    /// двух серединных элементов списка после сортировки.
-	/// </summary>
-	/// <exception cref="InvalidOperationException">Если последовательность не содержит элементов</exception>
-	public static double GetMedian(this IEnumerable<double> items)
-	{
-		throw new NotImplementedException();
-	}
+    public static double GetMedian(this IEnumerable<double> items)
+    {
+        if (items == null)
+            throw new ArgumentNullException(nameof(items));
+        var sortedList = items.OrderBy(x => x).ToList();
+        if (sortedList.Count == 0)
+        {
+            throw new InvalidOperationException("Sequence contains no elements");
+        }
+        int middleIndex = sortedList.Count / 2;
+        if (sortedList.Count % 2 == 1)
+        {
+            return sortedList[middleIndex];
+        }
+        else
+        {
+            return (sortedList[middleIndex - 1] + sortedList[middleIndex]) / 2.0;
+        }
+    }
 
-	/// <returns>
-	/// Возвращает последовательность, состоящую из пар соседних элементов.
-	/// Например, по последовательности {1,2,3} метод должен вернуть две пары: (1,2) и (2,3).
-	/// </returns>
-	public static IEnumerable<(T First, T Second)> GetBigrams<T>(this IEnumerable<T> items)
-	{
-		throw new NotImplementedException();
-	}
+    public static IEnumerable<(T First, T Second)> GetBigrams<T>(this IEnumerable<T> items)
+    {
+        if (items == null)
+            throw new ArgumentNullException(nameof(items));
+        T previous = default;
+        bool hasPrevious = false;
+        foreach (var current in items)
+        {
+            if (hasPrevious)
+            {
+                yield return (previous, current);
+            }
+            else
+            {
+                hasPrevious = true;
+            }
+            previous = current;
+        }
+    }
 }
