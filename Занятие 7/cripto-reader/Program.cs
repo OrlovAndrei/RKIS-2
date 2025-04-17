@@ -14,4 +14,3 @@ namespace cripto_reader
 				.UsePlatformDetect();
 	}
 }
-}
