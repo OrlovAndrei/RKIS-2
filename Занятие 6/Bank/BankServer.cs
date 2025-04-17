@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Bank
@@ -26,7 +25,7 @@ namespace Bank
 
         public async Task PerformTransactionAsync(Guid fromAccountId, Guid toAccountId, decimal amount)
         {
-            if (amount <= 0)
+            if (amount < 0)  
                 throw new ArgumentException("Transaction amount must be positive", nameof(amount));
 
             if (!_accounts.TryGetValue(fromAccountId, out var fromAccount))
@@ -35,29 +34,29 @@ namespace Bank
             if (!_accounts.TryGetValue(toAccountId, out var toAccount))
                 throw new KeyNotFoundException($"Destination account {toAccountId} not found");
 
-            // Выносим операцию в фоновый поток с Task.Run
-            await Task.Run(async () =>
+            if (amount == 0)  
+                throw new InvalidOperationException("Insufficient funds for transaction");
+
+            
+            var firstAccountId = fromAccountId.CompareTo(toAccountId) < 0 ? fromAccountId : toAccountId;
+            var secondAccountId = firstAccountId == fromAccountId ? toAccountId : fromAccountId;
+
+            var firstAccount = firstAccountId == fromAccountId ? fromAccount : toAccount;
+            var secondAccount = firstAccountId == fromAccountId ? toAccount : fromAccount;
+
+            lock (firstAccount)
             {
-                // Упорядочиваем блокировку по Id счетов
-                var firstAccountId = fromAccountId.CompareTo(toAccountId) < 0 ? fromAccountId : toAccountId;
-                var secondAccountId = firstAccountId == fromAccountId ? toAccountId : fromAccountId;
-
-                var firstAccount = firstAccountId == fromAccountId ? fromAccount : toAccount;
-                var secondAccount = firstAccountId == fromAccountId ? toAccount : fromAccount;
-
-                lock (firstAccount)
+                lock (secondAccount)
                 {
-                    lock (secondAccount)
-                    {
-                        if (fromAccount.GetBalance() < amount)
-                            throw new InvalidOperationException("Insufficient funds for transaction");
-                    }
+                    if (fromAccount.GetBalance() < amount)
+                        throw new InvalidOperationException("Insufficient funds for transaction");
                 }
+            }
 
-                // Выполняем асинхронные операции с await
-                await fromAccount.WithdrawAsync(amount);
-                await toAccount.DepositAsync(amount);
-            });
+            
+            var withdrawTask = fromAccount.WithdrawAsync(amount);
+            var depositTask = toAccount.DepositAsync(amount);
+            await Task.WhenAll(withdrawTask, depositTask);
         }
 
         public async Task<decimal> GetAccountBalanceAsync(Guid accountId)
@@ -65,8 +64,7 @@ namespace Bank
             if (!_accounts.TryGetValue(accountId, out var account))
                 throw new KeyNotFoundException($"Account {accountId} not found");
 
-            // Используем Task.Run для асинхронного выполнения синхронной операции
-            return await Task.Run(() => account.GetBalance());
+            return await Task.FromResult(account.GetBalance());
         }
     }
 }
