@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Bank
@@ -8,6 +9,7 @@ namespace Bank
     public class BankServer
     {
         private readonly ConcurrentDictionary<Guid, BankAccount> _accounts = new();
+        private readonly ConcurrentDictionary<Guid, SemaphoreSlim> _accountLocks = new();
 
         public async Task<Guid> CreateAccount(decimal initialBalance = 0)
         {
@@ -17,6 +19,8 @@ namespace Bank
             }
 
             var account = new BankAccount();
+            _accountLocks.TryAdd(account.Id, new SemaphoreSlim(1, 1));
+
             if (initialBalance > 0)
             {
                 await account.DepositAsync(initialBalance);
@@ -38,24 +42,28 @@ namespace Bank
                 throw new InvalidOperationException("Нельзя переводить средства на тот же самый счёт");
             }
 
-            if (!_accounts.TryGetValue(fromAccountId, out var fromAccount))
+            if (!_accounts.TryGetValue(fromAccountId, out var fromAccount) ||
+                !_accountLocks.TryGetValue(fromAccountId, out var fromLock))
             {
                 throw new KeyNotFoundException($"Исходный счёт не найден: {fromAccountId}");
             }
 
-            if (!_accounts.TryGetValue(toAccountId, out var toAccount))
+            if (!_accounts.TryGetValue(toAccountId, out var toAccount) ||
+                !_accountLocks.TryGetValue(toAccountId, out var toLock))
             {
                 throw new KeyNotFoundException($"Целевой счёт не найден: {toAccountId}");
             }
 
             // Определяем порядок блокировки для предотвращения deadlock
-            var firstLock = fromAccountId.CompareTo(toAccountId) < 0 ? fromAccount : toAccount;
-            var secondLock = fromAccountId.CompareTo(toAccountId) < 0 ? toAccount : fromAccount;
+            var firstLock = fromAccountId.CompareTo(toAccountId) < 0 ? fromLock : toLock;
+            var secondLock = fromAccountId.CompareTo(toAccountId) < 0 ? toLock : fromLock;
 
             // Блокируем счета в определённом порядке
-            lock (firstLock)
+            await firstLock.WaitAsync();
+            try
             {
-                lock (secondLock)
+                await secondLock.WaitAsync();
+                try
                 {
                     // Проверяем баланс и выполняем перевод
                     if (fromAccount.GetBalance() < amount)
@@ -63,9 +71,17 @@ namespace Bank
                         throw new InvalidOperationException("Недостаточно средств на счёте");
                     }
 
-                    fromAccount.WithdrawAsync(amount).Wait();
-                    toAccount.DepositAsync(amount).Wait();
+                    await fromAccount.WithdrawAsync(amount);
+                    await toAccount.DepositAsync(amount);
                 }
+                finally
+                {
+                    secondLock.Release();
+                }
+            }
+            finally
+            {
+                firstLock.Release();
             }
         }
 
