@@ -59,10 +59,10 @@ namespace Bank
             var secondLock = fromAccountId.CompareTo(toAccountId) < 0 ? toLock : fromLock;
 
             // Блокируем счета в определённом порядке
-            await firstLock.WaitAsync();
+            await firstLock.WaitAsync().ConfigureAwait(false);
             try
             {
-                await secondLock.WaitAsync();
+                await secondLock.WaitAsync().ConfigureAwait(false);
                 try
                 {
                     // Проверяем баланс и выполняем перевод
@@ -71,8 +71,8 @@ namespace Bank
                         throw new InvalidOperationException("Недостаточно средств на счёте");
                     }
 
-                    await fromAccount.WithdrawAsync(amount);
-                    await toAccount.DepositAsync(amount);
+                    await fromAccount.WithdrawAsync(amount).ConfigureAwait(false);
+                    await toAccount.DepositAsync(amount).ConfigureAwait(false);
                 }
                 finally
                 {
@@ -92,7 +92,7 @@ namespace Bank
                 throw new KeyNotFoundException($"Счёт не найден: {accountId}");
             }
 
-            return account.GetBalance();
+            return await Task.Run(() => account.GetBalance()).ConfigureAwait(false);
         }
     }
 }
