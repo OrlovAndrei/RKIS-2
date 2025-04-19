@@ -1,22 +1,34 @@
-﻿using System;
-
-namespace LimitedSizeStack;
+﻿namespace LimitedSizeStack;
 
 public class LimitedSizeStack<T>
 {
-	public LimitedSizeStack(int undoLimit)
-	{
-	}
+        private T[] items;
+        private int top = 0;
+        private int count = 0;
 
-	public void Push(T item)
-	{
-		throw new NotImplementedException();
-	}
+        public LimitedSizeStack(int capacity)
+        {
+            items = new T[capacity];
+        }
 
-	public T Pop()
-	{
-		throw new NotImplementedException();
-	}
+        public void Push(T item)
+        {
+            if (items.Length == 0)
+                return;
+            items[top] = item;
+            top = (top + 1) % items.Length;
+            if (count < items.Length)
+                count++;
+        }
 
-	public int Count => throw new NotImplementedException();
+        public T Pop()
+        {
+            if (count == 0)
+                throw new System.InvalidOperationException("Stack is empty");
+            top = (items.Length + top - 1) % items.Length;
+            count--;
+            return items[top];
+        }
+
+        public int Count => count;
 }

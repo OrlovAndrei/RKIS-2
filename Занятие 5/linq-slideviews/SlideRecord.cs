@@ -2,7 +2,7 @@
 
 public class SlideRecord
 {
-	public SlideRecord(int slideId, SlideType slideType, string unitTitle)
+	public SlideRecord(int slideId, string slideType, string unitTitle)
 	{
 		SlideId = slideId;
 		SlideType = slideType;
