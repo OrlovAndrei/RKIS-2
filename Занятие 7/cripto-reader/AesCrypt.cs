@@ -58,4 +58,4 @@ namespace cripto_reader
             }
         }
     }
-}
+}	
