@@ -30,6 +30,7 @@ namespace cripto_reader
             using var cryptoStream = new CryptoStream(memoryStream, algorithm.CreateDecryptor(), CryptoStreamMode.Read);
             using var streamReader = new StreamReader(cryptoStream);
             return streamReader.ReadToEnd();
+
         }
     }
 }
