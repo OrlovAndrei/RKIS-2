@@ -3,7 +3,7 @@ using cripto_reader.UI;
 
 namespace cripto_reader
 {
-	internal class Program
+	public class Program
 	{
 		[STAThread]
 		public static void Main(string[] args) => BuildAvaloniaApp()
