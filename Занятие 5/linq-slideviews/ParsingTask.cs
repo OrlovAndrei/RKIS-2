@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿﻿﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -38,7 +38,7 @@ namespace linq_slideviews
                 .Select(line =>
                 {
                     var parts = line.Split(';');
-                    if (parts.Length != 4) throw new FormatException($"Некорректная строка: {line}");
+                    if (parts.Length != 4) throw new FormatException($"Некорректная строка: {line}"); 
 
                     int userId;
                     if (!int.TryParse(parts[0], out userId)) throw new FormatException($"Некорректная строка: {line}");

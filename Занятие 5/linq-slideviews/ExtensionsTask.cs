@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,6 +27,7 @@ namespace linq_slideviews
             }
         }
 
+
         public static IEnumerable<(T First, T Second)> GetBigrams<T>(this IEnumerable<T> items)
         {
             if (items == null)
@@ -43,7 +44,6 @@ namespace linq_slideviews
             {
                 yield return (previous, enumerator.Current);
                 previous = enumerator.Current;
-            }
         }
     }
 }
