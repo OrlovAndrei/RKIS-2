@@ -6,22 +6,51 @@ namespace linq_slideviews;
 
 public class ParsingTask
 {
-	/// <param name="lines">все строки файла, которые нужно распарсить. Первая строка заголовочная.</param>
-	/// <returns>Словарь: ключ — идентификатор слайда, значение — информация о слайде</returns>
-	/// <remarks>Метод должен пропускать некорректные строки, игнорируя их</remarks>
-	public static IDictionary<int, SlideRecord> ParseSlideRecords(IEnumerable<string> lines)
-	{
-		throw new NotImplementedException();
-	}
+    public static IDictionary<int, SlideRecord> ParseSlideRecords(IEnumerable<string> lines)
+    {
+        return lines
+            .Skip(1)
+            .Select(line =>
+            {
+                var parts = line.Split(';');
+                if (parts.Length != 3)
+                    return null;
 
-	/// <param name="lines">все строки файла, которые нужно распарсить. Первая строка — заголовочная.</param>
-	/// <param name="slides">Словарь информации о слайдах по идентификатору слайда. 
-	/// Такой словарь можно получить методом ParseSlideRecords</param>
-	/// <returns>Список информации о посещениях</returns>
-	/// <exception cref="FormatException">Если среди строк есть некорректные</exception>
-	public static IEnumerable<VisitRecord> ParseVisitRecords(
-		IEnumerable<string> lines, IDictionary<int, SlideRecord> slides)
-	{
-		throw new NotImplementedException();
-	}
+                if (!int.TryParse(parts[0], out int id))
+                    return null;
+
+                if (!Enum.TryParse(parts[1], true, out SlideType type))
+                    return null;
+
+                return new SlideRecord(id, type, parts[2]);
+            })
+            .Where(slide => slide != null)
+            .ToDictionary(slide => slide.SlideId);
+    }
+
+    public static IEnumerable<VisitRecord> ParseVisitRecords(
+        IEnumerable<string> lines, IDictionary<int, SlideRecord> slides)
+    {
+        return lines
+            .Skip(1)
+            .Select(line => {
+                var parts = line.Split(';');
+                if (parts.Length != 4)
+                    throw new FormatException($"Wrong line [{line}]");
+
+                if (!int.TryParse(parts[0], out int userId) ||
+                    !int.TryParse(parts[1], out int slideId) ||
+                    !slides.ContainsKey(slideId))
+                    throw new FormatException($"Wrong line [{line}]");
+
+                if (!DateTime.TryParse($"{parts[3]} {parts[2]}", out DateTime dateTime))
+                    throw new FormatException($"Wrong line [{line}]");
+
+                return new VisitRecord(
+                    userId,
+                    slideId,
+                    dateTime,
+                    slides[slideId].SlideType);
+            });
+    }
 }
