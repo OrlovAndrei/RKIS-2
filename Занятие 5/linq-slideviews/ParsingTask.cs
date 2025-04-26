@@ -45,21 +45,16 @@ public class ParsingTask
                     if (!int.TryParse(parts[0], out var userId)) throw new FormatException($"Invalid UserId: {line}");
                     if (!int.TryParse(parts[1], out var slideId)) throw new FormatException($"Invalid SlideId: {line}");
                     if (!slides.ContainsKey(slideId)) throw new FormatException($"SlideId {slideId} not found in slides dictionary: {line}");
-                    // Local variables for parsing
-                    TimeSpan time;
-                    DateTime date;
-                    // Validate and parse Time
-                    if (!TimeSpan.TryParseExact(parts[2], "hh\\:mm\\:ss", CultureInfo.InvariantCulture, out time))
-                    {
+
+                    if (!TimeSpan.TryParseExact(parts[2], "hh\\:mm\\:ss", CultureInfo.InvariantCulture, out var time))
                         throw new FormatException($"Invalid Time: {line}");
-                    }
-                    // Validate and parse Date
-                    if (!DateTime.TryParseExact(parts[3], "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
-                    {
+
+                    if (!DateTime.TryParseExact(parts[3], "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
                         throw new FormatException($"Invalid Date: {line}");
-                    }
+
                     return new VisitRecord(userId, slideId, time, date);
                 })
+
                 .ToList();
         }
 }

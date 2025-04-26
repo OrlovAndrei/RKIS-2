@@ -10,7 +10,7 @@ public class SlideRecord
 	}
 
 	public readonly int SlideId;
-	public readonly SlideType SlideType;
+	public readonly string SlideType;
 	public readonly string UnitTitle;
 
 	public override string ToString()
@@ -36,8 +36,8 @@ public class SlideRecord
 		unchecked
 		{
 			var hashCode = SlideId;
-			hashCode = (hashCode*397) ^ (int) SlideType;
-			hashCode = (hashCode*397) ^ (UnitTitle != null ? UnitTitle.GetHashCode() : 0);
+			hashCode = (hashCode * 397) ^ (SlideType != null ? SlideType.GetHashCode() : 0);
+			hashCode = (hashCode * 397) ^ (UnitTitle != null ? UnitTitle.GetHashCode() : 0);
 			return hashCode;
 		}
 	}
