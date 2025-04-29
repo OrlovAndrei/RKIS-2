@@ -14,7 +14,25 @@ public static class ExtensionsTask
 	/// <exception cref="InvalidOperationException">Если последовательность не содержит элементов</exception>
 	public static double GetMedian(this IEnumerable<double> items)
 	{
-		throw new NotImplementedException();
+		var list = items.ToList();
+
+		if (list.Count == 0)
+		{
+			throw new InvalidOperationException("Последовательность не содержит элементов.");
+		}
+
+		list.Sort();
+		var count = list.Count;
+		var mid = count / 2;
+
+		if (count % 2 == 0)
+		{
+			return (list[mid - 1] + list[mid]) / 2.0;
+		}
+		else
+		{
+			return list[mid];
+		}
 	}
 
 	/// <returns>
@@ -23,6 +41,21 @@ public static class ExtensionsTask
 	/// </returns>
 	public static IEnumerable<(T First, T Second)> GetBigrams<T>(this IEnumerable<T> items)
 	{
-		throw new NotImplementedException();
+		using (var iterator = items.GetEnumerator())
+		{
+			if (!iterator.MoveNext())
+			{
+				yield break;
+			}
+
+			var first = iterator.Current;
+
+			while (iterator.MoveNext())
+			{
+				var second = iterator.Current;
+				yield return (first, second);
+				first = second;
+			}
+		}
 	}
 }
