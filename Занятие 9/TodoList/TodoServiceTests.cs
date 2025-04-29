@@ -35,7 +35,7 @@ namespace TodoList
 
 			// Act
 			item.Text = "Updated";
-			var updated = await _service.UpdateTodo(item);
+			var updated = await _service.UpdateTodo(item.Id, "Updated");
 			var dbItem = await _service.GetByIdTodos(item.Id);
 
 			// Assert

@@ -55,7 +55,7 @@ namespace TodoList.UI
 			if (sender is Button btn && btn.DataContext is TodoItemWithEditing item)
 			{
 				if (item.IsEditing)
-					await _todoService.UpdateTodo(item.Todo);
+					await _todoService.UpdateTodo(item.Todo.Id, item.Todo.Text);
 
 				item.IsEditing = !item.IsEditing;
 				RefreshItem(item);
@@ -68,7 +68,7 @@ namespace TodoList.UI
 			{
 				item.Todo.IsCompleted = checkBox.IsChecked ?? false;
 				item.Todo.EndTime = item.Todo.IsCompleted ? DateTime.Now : null;
-				await _todoService.UpdateTodo(item.Todo);
+				await _todoService.UpdateTodo(item.Todo.Id, item.Todo.Text);
 				RefreshItem(item);
 			}
 		}
