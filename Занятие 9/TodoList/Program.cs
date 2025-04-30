@@ -1,7 +1,7 @@
 ﻿using Avalonia;
-using cripto_reader.UI;
+using TodoList.UI;
 
-namespace cripto_reader
+namespace TodoList
 {
 	public class Program
 	{
