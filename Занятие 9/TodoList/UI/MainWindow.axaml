@@ -1,0 +1,79 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:conv="clr-namespace:TodoList.UI"
+        x:Class="TodoList.UI.MainWindow"
+        Title="Todo App" Height="600" Width="800">
+
+  <Window.Styles>
+    <!-- Стиль с правильным селектором -->
+    <Style Selector="TextBlock.date">
+      <Setter Property="Foreground" Value="Gray"/>
+      <Setter Property="FontSize" Value="12"/>
+    </Style>
+  </Window.Styles>
+
+  <Window.Resources>
+    <conv:InverseBoolConverter x:Key="InverseBool"/>
+    <conv:EditSaveConverter x:Key="EditSave"/>
+  </Window.Resources>
+
+  <Grid Margin="20">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <!-- Добавление задачи -->
+    <StackPanel Orientation="Horizontal" Spacing="10">
+      <TextBox x:Name="NewTodoTextBox"
+               AcceptsReturn="True"
+               TextWrapping="Wrap"
+               MinWidth="200"/>
+      <Button Content="Добавить" Click="AddTodo_Click"/>
+    </StackPanel>
+
+
+    <!-- Список задач -->
+    <ScrollViewer Grid.Row="1"
+              VerticalScrollBarVisibility="Auto"
+              HorizontalScrollBarVisibility="Disabled">
+      <ItemsControl x:Name="TodosItemsControl">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Border Padding="10" Margin="0 5" Background="#f0f0f0">
+              <StackPanel Spacing="10" Width="600">
+                <CheckBox Content="Выполнено"
+                  IsChecked="{Binding Todo.IsCompleted}"
+                  Click="CheckBox_Click"/>
+
+                <!-- Даты с исправленным применением стиля -->
+                <StackPanel Orientation="Horizontal" Spacing="20">
+                  <TextBlock Classes="date"
+                             Text="{Binding Todo.StartTime, StringFormat='Начато: {0:dd.MM.yyyy HH:mm}'}"/>
+                  <TextBlock Classes="date"
+                             Text="{Binding Todo.EndTime, StringFormat='Завершено: {0:dd.MM.yyyy HH:mm}'}"/>
+                </StackPanel>
+
+                <!-- Остальной код без изменений -->
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                  <TextBox Text="{Binding Todo.Text}"
+                          AcceptsReturn="True"
+                          TextWrapping="Wrap"
+                          MinHeight="100"
+                          MinWidth="200"
+                          IsReadOnly="{Binding IsEditing, Converter={StaticResource InverseBool}}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                  <Button Content="{Binding IsEditing, Converter={StaticResource EditSave}}"
+                    Click="EditSave_Click"/>
+                  <Button Content="Удалить" Click="DeleteTodo_Click"/>
+                </StackPanel>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+  </Grid>
+</Window>
