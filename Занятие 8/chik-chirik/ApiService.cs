@@ -14,7 +14,7 @@ namespace chik_chirik
 
         public async Task<List<Post>> GetPostsAsync(string searchTerm = null)
         {
-            var usersResponse = await _httpClient.GetFromJsonAsync<List<User>>("https://example.com/users");
+            var usersResponse = await _httpClient.GetFromJsonAsync<List<User>>("https://jsonplaceholder.typicode.com/users");
             var postsResponse = await _httpClient.GetFromJsonAsync<List<Post>>("https://jsonplaceholder.typicode.com/posts");
 
             foreach (var post in postsResponse)
@@ -32,7 +32,7 @@ namespace chik_chirik
 
         public async Task<List<Comment>> GetCommentsAsync(int postId)
         {
-            var comments = await _httpClient.GetFromJsonAsync<List<Comment>>($"https://example.com/posts/{postId}/comments");
+            var comments = await _httpClient.GetFromJsonAsync<List<Comment>>($"https://jsonplaceholder.typicode.com/posts/{postId}/comments");
             return comments ?? new List<Comment>();
         }
     }
