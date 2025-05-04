@@ -2,26 +2,43 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace linq_slideviews;
-
-public class ParsingTask
+namespace linq_slideviews
 {
-	/// <param name="lines">все строки файла, которые нужно распарсить. Первая строка заголовочная.</param>
-	/// <returns>Словарь: ключ — идентификатор слайда, значение — информация о слайде</returns>
-	/// <remarks>Метод должен пропускать некорректные строки, игнорируя их</remarks>
-	public static IDictionary<int, SlideRecord> ParseSlideRecords(IEnumerable<string> lines)
-	{
-		throw new NotImplementedException();
-	}
+    public static class StatisticsTask
+    {
+        public static double GetMedianTimePerSlide(List<VisitRecord> visits, SlideType slideType)
+        {
+            if (visits == null || visits.Count == 0)
+                return 0;
 
-	/// <param name="lines">все строки файла, которые нужно распарсить. Первая строка — заголовочная.</param>
-	/// <param name="slides">Словарь информации о слайдах по идентификатору слайда. 
-	/// Такой словарь можно получить методом ParseSlideRecords</param>
-	/// <returns>Список информации о посещениях</returns>
-	/// <exception cref="FormatException">Если среди строк есть некорректные</exception>
-	public static IEnumerable<VisitRecord> ParseVisitRecords(
-		IEnumerable<string> lines, IDictionary<int, SlideRecord> slides)
-	{
-		throw new NotImplementedException();
-	}
+            var filteredVisits = visits
+                .OrderBy(v => v.UserId)
+                .ThenBy(v => v.DateTime)
+                .ToList();
+
+            var timeDiffs = new List<double>();
+            int i = 0;
+
+            while (i < filteredVisits.Count - 1)
+            {
+                if (filteredVisits[i].UserId == filteredVisits[i + 1].UserId && 
+                    filteredVisits[i].SlideType == slideType)
+                {
+                    timeDiffs.Add((filteredVisits[i + 1].DateTime - filteredVisits[i].DateTime).TotalMinutes);
+                }
+                i++;
+            }
+
+            if (timeDiffs.Count == 0)
+                return 0;
+
+            timeDiffs.Sort();
+            int middle = timeDiffs.Count / 2;
+
+            if (timeDiffs.Count % 2 == 1)
+                return timeDiffs[middle];
+            else
+                return (timeDiffs[middle - 1] + timeDiffs[middle]) / 2;
+        }
+    }
 }
