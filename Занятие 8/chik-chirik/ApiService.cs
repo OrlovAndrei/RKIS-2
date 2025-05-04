@@ -15,7 +15,7 @@ namespace chik_chirik
         public async Task<List<Post>> GetPostsAsync(string searchTerm = null)
         {
             var usersResponse = await _httpClient.GetFromJsonAsync<List<User>>("https://example.com/users");
-            var postsResponse = await _httpClient.GetFromJsonAsync<List<Post>>("https://example.com/posts");
+            var postsResponse = await _httpClient.GetFromJsonAsync<List<Post>>("https://jsonplaceholder.typicode.com/posts");
 
             foreach (var post in postsResponse)
             {
