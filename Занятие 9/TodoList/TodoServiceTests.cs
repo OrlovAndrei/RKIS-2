@@ -27,28 +27,27 @@ namespace TodoList
 			Assert.That(result, Is.Null);
 		}
 
-		[Test]
-		public async Task UpdateTodo_ShouldModifyAndRollback()
-		{
-			// Arrange
-			var item = await _service.AddTodo(new TodoItem { Text = "Original" });
+        [Test]
+        public async Task UpdateTodo_ShouldModifyAndRollback()
+        {
+            // Arrange
+            var item = await _service.AddTodo(new TodoItem { Text = "Original" });
 
-			// Act
-			item.Text = "Updated";
-			var updated = await _service.UpdateTodo(item);
-			var dbItem = await _service.GetByIdTodos(item.Id);
+            // Act - используем новый метод UpdateTodoText
+            var updated = await _service.UpdateTodoText(item.Id, "Updated"); // Изменено здесь
+            var dbItem = await _service.GetByIdTodos(item.Id);
 
-			// Assert
-			Assert.Multiple(() =>
-			{
-				Assert.That(updated.Text, Is.EqualTo("Updated"));
-				Assert.That(dbItem.Text, Is.EqualTo("Updated"));
-			});
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(updated.Text, Is.EqualTo("Updated"));
+                Assert.That(dbItem.Text, Is.EqualTo("Updated"));
+            });
 
-			await _service.DeleteTodo(item.Id);
-		}
+            await _service.DeleteTodo(item.Id);
+        }
 
-		[Test]
+        [Test]
 		public async Task GetAllTodos_ShouldReturnEmptyAfterCleanup()
 		{
 			var item = await _service.AddTodo(new TodoItem());
