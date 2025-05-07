@@ -1,79 +1,97 @@
-﻿<Window xmlns="https://github.com/avaloniaui"
+﻿﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:conv="clr-namespace:TodoList.UI"
         x:Class="TodoList.UI.MainWindow"
         Title="Todo App" Height="600" Width="800">
 
-  <Window.Styles>
-    <!-- Стиль с правильным селектором -->
-    <Style Selector="TextBlock.date">
-      <Setter Property="Foreground" Value="Gray"/>
-      <Setter Property="FontSize" Value="12"/>
-    </Style>
-  </Window.Styles>
+	<Window.Styles>
+		<!-- Стиль с правильным селектором -->
+		<Style Selector="TextBlock.date">
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="FontSize" Value="15"/>
+		</Style>
+		<Style Selector="Button">
+			<Setter Property="Background" Value="#0078D7"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Padding" Value="10 5"/>
+			<Setter Property="Margin" Value="0 0 5 0"/>
+			<Setter Property="BorderBrush" Value="Transparent"/>
+			<Setter Property="CornerRadius" Value="5"/>
+		</Style>
 
-  <Window.Resources>
-    <conv:InverseBoolConverter x:Key="InverseBool"/>
-    <conv:EditSaveConverter x:Key="EditSave"/>
-  </Window.Resources>
+		<!-- Стиль для кнопки удаления -->
+		<Style Selector="Button.danger">
+			<Setter Property="Background" Value="#DC3545"/>
+		</Style>
 
-  <Grid Margin="20">
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-    </Grid.RowDefinitions>
+		<!-- Стиль для кнопки редактирования -->
+		<Style Selector="Button.success">
+			<Setter Property="Background" Value="#28A745"/>
+		</Style>
+	</Window.Styles>
 
-    <!-- Добавление задачи -->
-    <StackPanel Orientation="Horizontal" Spacing="10">
-      <TextBox x:Name="NewTodoTextBox"
-               AcceptsReturn="True"
-               TextWrapping="Wrap"
-               MinWidth="200"/>
-      <Button Content="Добавить" Click="AddTodo_Click"/>
-    </StackPanel>
+	<Window.Resources>
+		<conv:InverseBoolConverter x:Key="InverseBool"/>
+		<conv:EditSaveConverter x:Key="EditSave"/>
+	</Window.Resources>
+
+	<Grid Margin="20">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<!-- Добавление задачи -->
+		<StackPanel Orientation="Horizontal" Spacing="10">
+			<TextBox x:Name="NewTodoTextBox"
+					 AcceptsReturn="True"
+					 TextWrapping="Wrap"
+					 MinWidth="200"/>
+			<Button Content="Добавить" Click="AddTodo_Click"/>
+		</StackPanel>
 
 
-    <!-- Список задач -->
-    <ScrollViewer Grid.Row="1"
-              VerticalScrollBarVisibility="Auto"
-              HorizontalScrollBarVisibility="Disabled">
-      <ItemsControl x:Name="TodosItemsControl">
-        <ItemsControl.ItemTemplate>
-          <DataTemplate>
-            <Border Padding="10" Margin="0 5" Background="#f0f0f0">
-              <StackPanel Spacing="10" Width="600">
-                <CheckBox Content="Выполнено"
-                  IsChecked="{Binding Todo.IsCompleted}"
-                  Click="CheckBox_Click"/>
+		<!-- Список задач -->
+		<ScrollViewer Grid.Row="1"
+				  VerticalScrollBarVisibility="Auto"
+				  HorizontalScrollBarVisibility="Disabled">
+			<ItemsControl x:Name="TodosItemsControl">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Border Padding="10" Margin="0 5" Background="Black">
+							<StackPanel Spacing="10" Width="600">
+								<CheckBox Content="Выполнено"
+								  IsChecked="{Binding Todo.IsCompleted}"
+								  Click="CheckBox_Click"/>
 
-                <!-- Даты с исправленным применением стиля -->
-                <StackPanel Orientation="Horizontal" Spacing="20">
-                  <TextBlock Classes="date"
-                             Text="{Binding Todo.StartTime, StringFormat='Начато: {0:dd.MM.yyyy HH:mm}'}"/>
-                  <TextBlock Classes="date"
-                             Text="{Binding Todo.EndTime, StringFormat='Завершено: {0:dd.MM.yyyy HH:mm}'}"/>
-                </StackPanel>
+								<!-- Даты с исправленным применением стиля -->
+								<StackPanel Orientation="Horizontal" Spacing="20">
+									<TextBlock Classes="date"
+											   Text="{Binding Todo.StartTime, StringFormat='Начато: {0:dd.MM.yyyy HH:mm}'}"/>
+									<TextBlock Classes="date"
+											   Text="{Binding Todo.EndTime, StringFormat='Завершено: {0:dd.MM.yyyy HH:mm}'}"/>
+								</StackPanel>
 
-                <!-- Остальной код без изменений -->
-                <StackPanel Orientation="Horizontal" Spacing="10">
-                  <TextBox Text="{Binding Todo.Text}"
-                          AcceptsReturn="True"
-                          TextWrapping="Wrap"
-                          MinHeight="100"
-                          MinWidth="200"
-                          IsReadOnly="{Binding IsEditing, Converter={StaticResource InverseBool}}"/>
-                </StackPanel>
+								<!-- Остальной код без изменений -->
+								<StackPanel Orientation="Horizontal" Spacing="10">
+									<TextBox Text="{Binding Todo.Text}"
+											AcceptsReturn="True"
+											TextWrapping="Wrap"
+											MinHeight="100"
+											MinWidth="200"
+											IsReadOnly="{Binding IsEditing, Converter={StaticResource InverseBool}}"/>
+								</StackPanel>
 
-                <StackPanel Orientation="Horizontal" Spacing="10">
-                  <Button Content="{Binding IsEditing, Converter={StaticResource EditSave}}"
-                    Click="EditSave_Click"/>
-                  <Button Content="Удалить" Click="DeleteTodo_Click"/>
-                </StackPanel>
-              </StackPanel>
-            </Border>
-          </DataTemplate>
-        </ItemsControl.ItemTemplate>
-      </ItemsControl>
-    </ScrollViewer>
-  </Grid>
+								<StackPanel Orientation="Horizontal" Spacing="10">
+									<Button Content="{Binding IsEditing, Converter={StaticResource EditSave}}"
+									  Click="EditSave_Click"/>
+									<Button Content="Удалить" Click="DeleteTodo_Click"/>
+								</StackPanel>
+							</StackPanel>
+						</Border>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</ScrollViewer>
+	</Grid>
 </Window>
