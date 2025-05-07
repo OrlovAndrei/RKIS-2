@@ -11,17 +11,44 @@ namespace Bank
 
 		public async Task<Guid> CreateAccount(decimal initialBalance = 0)
 		{
-			throw new NotImplementedException();
+			if (initialBalance < 0)
+            		{
+                		throw new ArgumentException("Initial balance cannot be negative", nameof(initialBalance));
+            		}
+
+            		var account = new BankAccount();
+            		await account.DepositAsync(initialBalance);
+            		_accounts.TryAdd(account.Id, account);
+            		return account.Id;
 		}
 
 		public async Task PerformTransactionAsync(Guid fromAccountId, Guid toAccountId, decimal amount)
 		{
-			throw new NotImplementedException();
+			if (amount < 0)
+            		{
+                		throw new ArgumentException("Transaction amount cannot be negative", nameof(amount));
+            		}
+
+            		if (!_accounts.ContainsKey(fromAccountId) || !_accounts.ContainsKey(toAccountId))
+            		{
+                		throw new KeyNotFoundException("One or both accounts do not exist.");
+            		}
+
+            		var fromAccount = _accounts[fromAccountId];
+            		var toAccount = _accounts[toAccountId];
+
+            		await fromAccount.WithdrawAsync(amount);
+            		await toAccount.DepositAsync(amount);
 		}
 
 		public async Task<decimal> GetAccountBalanceAsync(Guid accountId)
 		{
-			throw new NotImplementedException();
+			if (!_accounts.ContainsKey(accountId))
+            		{
+                		throw new KeyNotFoundException("Account does not exist.");
+            		}
+
+            		return await Task.FromResult(_accounts[accountId].GetBalance());
 		}
 	}
 }

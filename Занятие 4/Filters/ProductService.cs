@@ -15,6 +15,24 @@
 			return filteredProducts;
 		}
 
-		//напишите методы Not, And, Or и Xor
+		public static Func<Product, bool> Not(Func<Product, bool> filter)
+        	{
+            		return product => !filter(product);
+        	}
+
+        	public static Func<Product, bool> And(params Func<Product, bool>[] filters)
+        	{
+            		return product => filters.All(filter => filter(product));
+        	}
+
+        	public static Func<Product, bool> Or(params Func<Product, bool>[] filters)
+        	{
+            		return product => filters.Any(filter => filter(product));
+        	}
+
+        	public static Func<Product, bool> Xor(params Func<Product, bool>[] filters)
+        	{
+            		return product => filters.Count(filter => filter(product)) % 2 == 1;
+        	}
 	}
 }
