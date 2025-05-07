@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿
+using NUnit.Framework;
 
 namespace TodoList
 {
@@ -33,8 +34,9 @@ namespace TodoList
             // Arrange
             var item = await _service.AddTodo(new TodoItem { Text = "Original" });
 
-            // Act - используем новый метод UpdateTodoText
-            var updated = await _service.UpdateTodoText(item.Id, "Updated"); // Изменено здесь
+            // Act
+            item.Text = "Updated";
+            var updated = await _service.UpdateTodo(item);
             var dbItem = await _service.GetByIdTodos(item.Id);
 
             // Assert
