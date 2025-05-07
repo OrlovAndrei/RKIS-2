@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TodoList;
-
 
 namespace TodoList
 {
@@ -10,8 +8,14 @@ namespace TodoList
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=todo.db");
+            optionsBuilder.UseSqlite("Data Source=todolist.db");
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TodoItem>()
+                .Property(t => t.Id)
+                .ValueGeneratedOnAdd();
         }
     }
 }
-

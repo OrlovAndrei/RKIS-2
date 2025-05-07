@@ -1,11 +1,9 @@
 ﻿using Avalonia;
-using System;
-using TodoList;
+using TodoList.UI;
 
-
-namespace TodoList.UI
+namespace TodoList
 {
-    class Program
+    public class Program
     {
         [STAThread]
         public static void Main(string[] args) => BuildAvaloniaApp()
@@ -13,7 +11,6 @@ namespace TodoList.UI
 
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
-                .UsePlatformDetect()
-                .LogToTrace();
+                .UsePlatformDetect();
     }
 }

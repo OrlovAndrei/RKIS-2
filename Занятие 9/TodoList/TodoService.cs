@@ -4,52 +4,72 @@ namespace TodoList
 {
     public class TodoService
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _db;
 
         public TodoService()
         {
-            _context = new AppDbContext();
-            _context.Database.EnsureCreated(); // создаёт БД, если её нет
+            _db = new AppDbContext();
+            _db.Database.EnsureCreated();
         }
 
         public async Task<TodoItem> AddTodo(TodoItem item)
         {
-            _context.TodoItems.Add(item);
-            await _context.SaveChangesAsync();
+            _db.TodoItems.Add(item);
+            await _db.SaveChangesAsync();
             return item;
         }
 
-        public async Task<TodoItem>? UpdateTodo(TodoItem item)
+        public async Task<bool> DeleteTodo(Guid id)
         {
-            var existing = await _context.TodoItems.FindAsync(item.Id);
-            if (existing == null) return null;
+            var item = await _db.TodoItems.FindAsync(id);
+            if (item == null) return false;
 
-            existing.Text = item.Text;
-            existing.IsCompleted = item.IsCompleted;
-            existing.EndTime = item.IsCompleted ? DateTime.Now : null;
-
-            await _context.SaveChangesAsync();
-            return existing;
+            _db.TodoItems.Remove(item);
+            await _db.SaveChangesAsync();
+            return true;
         }
 
-        public async Task DeleteTodo(Guid id)
+        public async Task<TodoItem?> UpdateTodoText(Guid id, string newText)
         {
-            var item = await _context.TodoItems.FindAsync(id);
-            if (item != null)
+            var item = await _db.TodoItems.FindAsync(id);
+            if (item == null) return null;
+
+            item.Text = newText;
+            await _db.SaveChangesAsync();
+            return item;
+        }
+
+        public async Task<TodoItem?> ToggleTodoCompletion(TodoItem item)
+        {
+            var existingItem = await _db.TodoItems.FindAsync(item.Id);
+            if (existingItem == null) return null;
+            existingItem.Text = item.Text;
+            existingItem.IsCompleted = item.IsCompleted;
+            if (item == null) return null;
+
+            if (item.IsCompleted && existingItem.EndTime == null)
             {
-                _context.TodoItems.Remove(item);
-                await _context.SaveChangesAsync();
+                existingItem.EndTime = DateTime.Now;
             }
+
+            else if (!item.IsCompleted)
+            {
+                existingItem.EndTime = null;
+            }
+
+            await _db.SaveChangesAsync();
+            return existingItem;
         }
 
         public async Task<List<TodoItem>> GetAllTodos()
         {
-            return await _context.TodoItems.ToListAsync();
+            return await _db.TodoItems.ToListAsync();
         }
 
-        public async Task<TodoItem>? GetByIdTodos(Guid id)
+        public async Task<TodoItem?> GetByIdTodos(Guid id)
         {
-            return await _context.TodoItems.FindAsync(id);
+            return await _db.TodoItems.FindAsync(id);
         }
+
     }
 }
