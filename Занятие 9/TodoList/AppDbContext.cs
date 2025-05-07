@@ -1,8 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
-namespace TodoList
+public class TodoContext : DbContext
 {
-	public class AppDbContext : DbContext
-	{
-	}
+    public DbSet<TodoItem> TodoItems { get; set; }
+
+    public TodoContext(DbContextOptions<TodoContext> options)
+        : base(options)
+    {
+        Database.EnsureCreated(); 
+    }
 }

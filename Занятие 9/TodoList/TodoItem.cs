@@ -1,11 +1,11 @@
 ﻿namespace TodoList
 {
 	public class TodoItem
-	{
-		public Guid Id { get; } = Guid.NewGuid();
-		public string Text { get; set; } = "";
-		public DateTime StartTime { get; } = DateTime.Now;
-		public DateTime? EndTime { get; set; 
-		public bool IsCompleted { get; set; }
-	}
+{
+    public int Id { get; set; }
+    public string Text { get; set; } = string.Empty;
+    public bool IsCompleted { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? CompletedAt { get; set; }
+}
 }
