@@ -1,10 +1,9 @@
-﻿﻿using System.Net.Http;
+﻿﻿﻿using System.Net.Http;
 using System.Net.Http.Json;
 using chik_chirik.Models;
 
 namespace chik_chirik
 {
-	{
     public class ApiService
     {
         private readonly HttpClient _httpClient;
