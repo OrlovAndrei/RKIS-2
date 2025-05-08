@@ -15,7 +15,7 @@ namespace TodoList
             return Task.FromResult(item);
         }
 
-        public Task<TodoItem?> UpdateTodo(TodoItem item) // Изменили возвращаемый тип на TodoItem?
+        public Task<TodoItem?> UpdateTodo(TodoItem item)
         {
             var existing = _todos.FirstOrDefault(t => t.Id == item.Id);
             if (existing != null)
@@ -25,7 +25,7 @@ namespace TodoList
                 existing.EndTime = item.EndTime;
                 return Task.FromResult<TodoItem?>(existing);
             }
-            return Task.FromResult<TodoItem?>(null); // Явно указываем тип возвращаемого null
+            return Task.FromResult<TodoItem?>(null);
         }
 
         public Task DeleteTodo(Guid id)
@@ -39,7 +39,7 @@ namespace TodoList
             return Task.FromResult(_todos.ToList());
         }
 
-        public Task<TodoItem?> GetByIdTodos(Guid id) // Изменили возвращаемый тип на TodoItem?
+        public Task<TodoItem?> GetByIdTodos(Guid id)
         {
             return Task.FromResult(_todos.FirstOrDefault(t => t.Id == id));
         }
