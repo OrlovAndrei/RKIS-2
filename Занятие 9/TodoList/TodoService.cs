@@ -2,46 +2,59 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace TodoList
 {
     public class TodoService
     {
-        private readonly List<TodoItem> _todos = new();
+        private readonly AppDbContext _context;
 
-        public Task<TodoItem> AddTodo(TodoItem item)
+        public TodoService()
         {
-            _todos.Add(item);
-            return Task.FromResult(item);
+            _context = new AppDbContext();
+            _context.Database.EnsureCreated();
         }
 
-        public Task<TodoItem?> UpdateTodo(TodoItem item)
+        public async Task<TodoItem> AddTodo(TodoItem item)
         {
-            var existing = _todos.FirstOrDefault(t => t.Id == item.Id);
+            _context.Todos.Add(item);
+            await _context.SaveChangesAsync();
+            return item;
+        }
+
+        public async Task<TodoItem?> UpdateTodo(TodoItem item)
+        {
+            var existing = await _context.Todos.FindAsync(item.Id);
             if (existing != null)
             {
                 existing.Text = item.Text;
                 existing.IsCompleted = item.IsCompleted;
                 existing.EndTime = item.EndTime;
-                return Task.FromResult<TodoItem?>(existing);
+                await _context.SaveChangesAsync();
+                return existing;
             }
-            return Task.FromResult<TodoItem?>(null);
+            return null;
         }
 
-        public Task DeleteTodo(Guid id)
+        public async Task DeleteTodo(Guid id)
         {
-            _todos.RemoveAll(t => t.Id == id);
-            return Task.CompletedTask;
+            var item = await _context.Todos.FindAsync(id);
+            if (item != null)
+            {
+                _context.Todos.Remove(item);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public Task<List<TodoItem>> GetAllTodos()
+        public async Task<List<TodoItem>> GetAllTodos()
         {
-            return Task.FromResult(_todos.ToList());
+            return await _context.Todos.ToListAsync();
         }
 
-        public Task<TodoItem?> GetByIdTodos(Guid id)
+        public async Task<TodoItem?> GetByIdTodos(Guid id)
         {
-            return Task.FromResult(_todos.FirstOrDefault(t => t.Id == id));
+            return await _context.Todos.FindAsync(id);
         }
     }
 }
