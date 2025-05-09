@@ -8,16 +8,16 @@ namespace TodoList
 	public class TodoServiceTests
 	{
 		private TodoService _service;
-		private TodoContext _context;
+		private AppDbContext _context;
 
 		[SetUp]
 		public void Setup()
 		{
-			var options = new DbContextOptionsBuilder<TodoContext>()
+			var options = new DbContextOptionsBuilder<AppDbContext>()
 				.UseInMemoryDatabase(databaseName: System.Guid.NewGuid().ToString())
 				.Options;
 
-			_context = new TodoContext(options);
+			_context = new AppDbContext(options);
 			_service = new TodoService(_context);
 		}
 		
