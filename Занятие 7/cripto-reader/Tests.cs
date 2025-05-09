@@ -64,6 +64,6 @@ namespace cripto_reader
 			byte[] encrypted = AesCrypt.Encrypt(input, TestPassword);
 			string decrypted = AesCrypt.Decrypt(encrypted, TestPassword);
 			Assert.That(input == decrypted);
-		
+		}
 	}
 }
